@@ -1,0 +1,38 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: backend-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+  - name: backend.rules
+    rules:
+
+    - alert: HighBackendCPU
+      expr: sum(rate(container_cpu_usage_seconds_total{namespace="backend", pod=~"backend-.*"}[2m])) > 0.5
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High CPU usage on backend pods"
+        description: "Backend CPU usage is above 0.5 cores for 1 minute."
+
+    - alert: BackendDown
+      expr: absent(up{job="backend-service", namespace="backend"})
+      for: 30s
+      labels:
+        severity: critical
+      annotations:
+        summary: "All backend pods are down"
+        description: "No backend-service targets are being scraped."
+
+    - alert: NoTraffic
+      expr: rate(app_requests_total[2m]) == 0
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        summary: "No traffic detected"
+        description: "No requests received in the last 2 minutes."
