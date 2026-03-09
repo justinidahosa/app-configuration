@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: backend-blue:1.0.0
+          image: 864899875710.dkr.ecr.us-east-1.amazonaws.com/backend-blue:1.0.0
           imagePullPolicy: Never
           ports:
             - containerPort: 8000
