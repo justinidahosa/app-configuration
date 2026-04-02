@@ -1,0 +1,7 @@
+kubeconfig
+*.kubeconfig
+
+.vscode/
+.idea/
+*.swp
+*.swo

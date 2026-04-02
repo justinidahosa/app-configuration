@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-v2-config
+  namespace: backend
+data:
+  DEPLOYMENT: "Green"
+  VERSION: "2.0.0"
