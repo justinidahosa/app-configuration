@@ -1,0 +1,9 @@
+﻿{
+  "spec": {
+    "tokenRequests": [
+      {
+        "audience": "sts.amazonaws.com"
+      }
+    ]
+  }
+}
