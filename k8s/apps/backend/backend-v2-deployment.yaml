@@ -3,14 +3,17 @@ kind: Deployment
 metadata:
   name: backend-v2
   namespace: backend
-  annotations: 
+  annotations:
     argocd.argoproj.io/sync-wave: "2"
+
 spec:
   replicas: 2
+
   selector:
     matchLabels:
       app: backend
       version: v2
+
   template:
     metadata:
       labels:
@@ -20,22 +23,49 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8000"
         prometheus.io/path: "/metrics"
+
     spec:
       serviceAccountName: backend-sa
+
       containers:
         - name: backend
-          image: 284432073095.dkr.ecr.us-east-1.amazonaws.com/backend-v2:18be8be9af57013f21b5ed7055a1c826cb2f052f
+          image: 284432073095.dkr.ecr.us-east-1.amazonaws.com/backend-v2:7b8d0b03d82e4318517b4ae696142b8599ed3725
           imagePullPolicy: Always
+
           ports:
             - containerPort: 8000
 
-          volumeMounts:
-            - name: secrets-store
-              mountPath: "/mnt/secrets-store"
-              readOnly: true
-
           env:
-            # App config
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: backend-db-secret
+                  key: DB_HOST
+
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: backend-db-secret
+                  key: DB_USER
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: backend-db-secret
+                  key: DB_PASSWORD
+
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: backend-db-secret
+                  key: DB_NAME
+
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: backend-db-secret
+                  key: DB_PORT
+
             - name: DEPLOYMENT
               valueFrom:
                 configMapKeyRef:
@@ -63,11 +93,3 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 10
             failureThreshold: 3
-
-      volumes:
-        - name: secrets-store
-          csi:
-            driver: secrets-store.csi.k8s.io
-            readOnly: true
-            volumeAttributes:
-              secretProviderClass: backend-db-secrets
