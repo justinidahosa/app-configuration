@@ -3,8 +3,6 @@ kind: Deployment
 metadata:
   name: backend-v1
   namespace: backend
-  annotations:
-    argocd.argoproj.io/sync-wave: "2"
 spec:
   replicas: 2
   selector:
@@ -16,24 +14,18 @@ spec:
       labels:
         app: backend
         version: v1
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8000"
-        prometheus.io/path: "/metrics"
     spec:
       serviceAccountName: backend-sa
       containers:
         - name: backend
           image: 284432073095.dkr.ecr.us-east-1.amazonaws.com/backend-v1:7b8d0b03d82e4318517b4ae696142b8599ed3725
           imagePullPolicy: Always
-          
           ports:
             - containerPort: 8000
-
+          
           envFrom:
             - secretRef:
                 name: backend-db-secret
-
           env:
             - name: DEPLOYMENT
               valueFrom:
@@ -46,6 +38,11 @@ spec:
                   name: backend-v1-config
                   key: VERSION
 
+          volumeMounts:
+            - name: secrets-store-inline
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+
           readinessProbe:
             httpGet:
               path: /health
@@ -56,3 +53,10 @@ spec:
               path: /health
               port: 8000
             initialDelaySeconds: 20
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "backend-spc"
