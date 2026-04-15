@@ -3,6 +3,8 @@ kind: ConfigMap
 metadata:
   name: backend-v1-config
   namespace: backend
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 data:
   DEPLOYMENT: "Blue"
   VERSION: "1.0.0"

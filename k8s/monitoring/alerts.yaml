@@ -5,20 +5,12 @@ metadata:
   namespace: monitoring
   labels:
     release: monitoring
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   groups:
   - name: backend.rules
     rules:
-
-    - alert: HighBackendCPU
-      expr: sum(rate(container_cpu_usage_seconds_total{namespace="backend", pod=~"backend-.*"}[2m])) > 0.5
-      for: 1m
-      labels:
-        severity: warning
-      annotations:
-        summary: "High CPU usage on backend pods"
-        description: "Backend CPU usage is above 0.5 cores for 1 minute."
-
     - alert: BackendDown
       expr: absent(up{job="backend-service", namespace="backend"})
       for: 30s
@@ -26,13 +18,25 @@ spec:
         severity: critical
       annotations:
         summary: "All backend pods are down"
-        description: "No backend-service targets are being scraped."
+        description: "Prometheus cannot find any 'up' targets for the backend service."
 
     - alert: NoTraffic
-      expr: sum(rate(app_requests_total[2m])) == 0
-      for: 2m
+      expr: |
+        sum(rate(app_requests_total{namespace="backend"}[2m])) == 0 
+        or 
+        absent(app_requests_total{namespace="backend"})
+      for: 5m
       labels:
         severity: warning
       annotations:
-        summary: "No traffic detected"
-        description: "No requests received in the last 2 minutes."
+        summary: "No traffic detected on Backend"
+        description: "The backend has processed zero requests. Check Ingress/ALB."
+
+    - alert: DatabaseIssues
+      expr: app_db_request_count{namespace="backend"} == 0
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "App reporting 0 database hits"
+        description: "The DB_REQUEST_COUNT gauge is at 0. The app might be failing to write to the RDS instance."

@@ -5,15 +5,12 @@ metadata:
   namespace: backend
   annotations:
     argocd.argoproj.io/sync-wave: "2"
-
 spec:
   replicas: 2
-
   selector:
     matchLabels:
       app: backend
       version: v1
-
   template:
     metadata:
       labels:
@@ -23,55 +20,42 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8000"
         prometheus.io/path: "/metrics"
-
     spec:
       serviceAccountName: backend-sa
-
       containers:
         - name: backend
-          image: 284432073095.dkr.ecr.us-east-1.amazonaws.com/backend-v1:7b8d0b03d82e4318517b4ae696142b8599ed3725
+          image: 284432073095.dkr.ecr.us-east-1.amazonaws.com/backend-v2:7b8d0b03d82e4318517b4ae696142b8599ed3725
           imagePullPolicy: Always
-
+          command: ["/bin/sh", "-c"]
+          args: 
+            - |
+              echo "Waiting for CSI driver to mount secrets..."
+              until [ -f /mnt/secrets/DB_HOST ]; do 
+                echo "Still waiting for /mnt/secrets/DB_HOST..."
+                sleep 2
+              done
+              echo "Secrets found! Exporting to Env and starting app..."
+              # Optional: Manually export the files to Env Vars if your python code needs them
+              export DB_HOST=$(cat /mnt/secrets/DB_HOST)
+              export DB_USER=$(cat /mnt/secrets/DB_USER)
+              export DB_PASSWORD=$(cat /mnt/secrets/DB_PASSWORD)
+              export DB_NAME=$(cat /mnt/secrets/DB_NAME)
+              export DB_PORT=$(cat /mnt/secrets/DB_PORT)
+              python app.py
           ports:
             - containerPort: 8000
 
+          volumeMounts:
+            - name: secrets-store
+              mountPath: "/mnt/secrets"
+              readOnly: true
+
           env:
-            - name: DB_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: backend-db-secret
-                  key: DB_HOST
-
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: backend-db-secret
-                  key: DB_USER
-
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: backend-db-secret
-                  key: DB_PASSWORD
-
-            - name: DB_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: backend-db-secret
-                  key: DB_NAME
-
-            - name: DB_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: backend-db-secret
-                  key: DB_PORT
-
             - name: DEPLOYMENT
               valueFrom:
                 configMapKeyRef:
                   name: backend-v1-config
                   key: DEPLOYMENT
-
             - name: VERSION
               valueFrom:
                 configMapKeyRef:
@@ -82,14 +66,17 @@ spec:
             httpGet:
               path: /health
               port: 8000
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            failureThreshold: 3
-
+            initialDelaySeconds: 15
           livenessProbe:
             httpGet:
               path: /health
               port: 8000
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            failureThreshold: 3
+            initialDelaySeconds: 20
+
+      volumes:
+        - name: secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "backend-db-secrets"

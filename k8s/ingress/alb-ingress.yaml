@@ -4,11 +4,12 @@ metadata:
   name: frontend-ingress
   namespace: frontend
   annotations:
+    argocd.argoproj.io/sync-wave: "4"
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: 'true'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:284432073095:certificate/29dce475-260b-4463-80de-7bc61c10a069
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:284432073095:certificate/8a88e62e-795e-42ad-9b5a-ecf8730b2528
 
 spec:
   ingressClassName: alb
@@ -28,5 +29,12 @@ spec:
         backend:
           service:
             name: backend-service
+            port:
+              number: 80
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-service-proxy
             port:
               number: 80
