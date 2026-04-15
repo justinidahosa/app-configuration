@@ -46,11 +46,6 @@ spec:
                   name: backend-v2-config
                   key: VERSION
 
-          volumeMounts:
-            - name: secrets-store
-              mountPath: "/mnt/secrets"
-              readOnly: true
-
           readinessProbe:
             httpGet:
               path: /health
@@ -61,11 +56,3 @@ spec:
               path: /health
               port: 8000
             initialDelaySeconds: 20
-
-      volumes:
-        - name: secrets-store
-          csi:
-            driver: secrets-store.csi.k8s.io
-            readOnly: true
-            volumeAttributes:
-              secretProviderClass: "backend-db-secrets"
