@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service-proxy
+  namespace: backend 
+  labels:
+    app: backend-proxy
+    release: prometheus-stack 
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app: backend-proxy
