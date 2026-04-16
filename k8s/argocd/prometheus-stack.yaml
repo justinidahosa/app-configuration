@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: prometheus-stack
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
@@ -12,13 +14,14 @@ spec:
     helm:
       values: |
         grafana:
-          adminPassword: "admin" # Change this for production!
+          adminPassword: "admin"
         prometheus:
           prometheusSpec:
+            # Allows discovery of ServiceMonitors in any namespace
             serviceMonitorSelectorNilUsesHelmValues: false
         prometheusOperator:
           admissionWebhooks:
-            patch: 
+            patch:
               enabled: true
   destination:
     server: https://kubernetes.default.svc
@@ -29,5 +32,14 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - ServerSideApply=true
-      - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true 
+      - ApplyOutOfSyncOnly=true 
+  ignoreDifferences:
+    - group: monitoring.coreos.com
+      kind: ServiceMonitor
+      jsonPointers:
+        - /metadata/labels/release
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+      jsonPointers:
+        - /webhooks/0/clientConfig/caBundle

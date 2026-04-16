@@ -1,18 +1,20 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: backend-monitor
+  name: backend-servicemonitor
   namespace: monitoring
   labels:
     release: prometheus-stack
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   selector:
     matchLabels:
-      app: backend 
+      app: backend
   namespaceSelector:
     matchNames:
       - backend
   endpoints:
-  - port: http 
-    path: /metrics
-    interval: 15s
+    - port: http
+      path: /metrics
+      interval: 10s
