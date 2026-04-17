@@ -13,12 +13,12 @@ metadata:
           "TargetGroups": [
             {
               "ServiceName": "backend-v1-service",
-              "Port": 80,
+              "Port": "http",
               "Weight": 100
             },
             {
               "ServiceName": "backend-v2-service",
-              "Port": 80,
+              "Port": "http",
               "Weight": 0
             }
           ]
