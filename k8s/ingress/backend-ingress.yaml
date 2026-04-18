@@ -8,6 +8,7 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/backend-protocol: HTTP
     alb.ingress.kubernetes.io/rewrite-target: /
+    alb.ingress.kubernetes.io/healthcheck-port: '8000' 
     alb.ingress.kubernetes.io/actions.weighted-routing: >
       {
         "type": "forward",
