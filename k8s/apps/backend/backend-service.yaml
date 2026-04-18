@@ -8,6 +8,6 @@ spec:
     app: backend
     version: v1
   ports:
-    - name: TCP
+    - name: http
       port: 80
       targetPort: 8000
