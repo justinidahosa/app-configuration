@@ -8,6 +8,6 @@ spec:
     app: frontend
     version: v1
   ports:
-    - name: http
+    - name: TCP
       port: 80
       targetPort: 8080
