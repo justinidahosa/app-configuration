@@ -35,7 +35,7 @@ spec:
     http:
       paths:
       - path: /api/*
-        pathType: Prefix
+        pathType: ImplementationSpecific
         backend:
           service:
             name: weighted-routing
