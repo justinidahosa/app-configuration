@@ -9,12 +9,12 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/rewrite-target: /$1
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/healthcheck-port: '8000'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:284432073095:certificate/8a88e62e-795e-42ad-9b5a-ecf8730b2528
-    alb.ingress.kubernetes.io/rewrite-target: /
-    alb.ingress.kubernetes.io/healthcheck-path: /health
-    alb.ingress.kubernetes.io/healthcheck-port: '8000' 
     alb.ingress.kubernetes.io/actions.weighted-routing: >
       {
         "type": "forward",
@@ -31,8 +31,8 @@ spec:
   - host: app.justinidahosa.click
     http:
       paths:
-      - path: /api/health
-        pathType: Exact
+      - path: /api/(.*)
+        pathType: ImplementationSpecific
         backend:
           service:
             name: weighted-routing
