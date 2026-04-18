@@ -12,11 +12,11 @@ metadata:
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:284432073095:certificate/8a88e62e-795e-42ad-9b5a-ecf8730b2528
     alb.ingress.kubernetes.io/actions.frontend-weights: >
       {
-        "Type": "forward",
-        "ForwardConfig": {
-          "TargetGroups": [
-            { "ServiceName": "frontend-v1-service", "Port": 80, "Weight": 100 },
-            { "ServiceName": "frontend-v2-service", "Port": 80, "Weight": 0 }
+        "type": "forward",
+        "forwardConfig": {
+          "targetGroups": [
+            { "serviceName": "frontend-v1-service", "servicePort": 80, "weight": 100 },
+            { "serviceName": "frontend-v2-service", "servicePort": 80, "weight": 0 }
           ]
         }
       }
