@@ -32,8 +32,15 @@ spec:
   - host: app.justinidahosa.click
     http:
       paths:
-      - path: /api/(.*)
-        pathType: ImplementationSpecific
+      - path: /health
+        pathType: Exact
+        backend:
+          service:
+            name: weighted-routing
+            port:
+              name: use-annotation
+      - path: /
+        pathType: Exact
         backend:
           service:
             name: weighted-routing
