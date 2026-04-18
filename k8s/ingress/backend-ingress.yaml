@@ -8,11 +8,11 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/actions.weighted-routing: >
       {
-        "Type": "forward",
-        "ForwardConfig": {
-          "TargetGroups": [
-            { "ServiceName": "backend-v1-service", "Port": 80, "Weight": 100 },
-            { "ServiceName": "backend-v2-service", "Port": 80, "Weight": 0 }
+        "type": "forward",
+        "forwardConfig": {
+          "targetGroups": [
+            { "serviceName": "backend-v1-service", "servicePort": 80, "weight": 100 },
+            { "serviceName": "backend-v2-service", "servicePort": 80, "weight": 0 }
           ]
         }
       }
