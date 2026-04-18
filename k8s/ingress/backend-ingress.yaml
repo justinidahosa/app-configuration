@@ -5,35 +5,24 @@ metadata:
   namespace: backend
   annotations:
     alb.ingress.kubernetes.io/group.name: "devsecops-stack"
-    alb.ingress.kubernetes.io/priority: '1' # Checked first
+    alb.ingress.kubernetes.io/priority: '1'
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/backend-protocol: HTTP
     alb.ingress.kubernetes.io/healthcheck-path: /health
-    alb.ingress.kubernetes.io/healthcheck-port: '8000'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:284432073095:certificate/8a88e62e-795e-42ad-9b5a-ecf8730b2528
-    alb.ingress.kubernetes.io/actions.weighted-routing: >
-      {
-        "type": "forward",
-        "forwardConfig": {
-          "targetGroups": [
-            { "serviceName": "backend-v1-service", "servicePort": 80, "weight": 100 },
-            { "serviceName": "backend-v2-service", "servicePort": 80, "weight": 0 }
-          ]
-        }
-      }
 spec:
   ingressClassName: alb
   rules:
   - host: app.justinidahosa.click
     http:
       paths:
-      - path: /health 
+      - path: /health
         pathType: Exact
         backend:
           service:
-            name: weighted-routing
+            name: backend-service
             port:
-              name: use-annotation
+              number: 80

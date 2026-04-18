@@ -11,16 +11,6 @@ metadata:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:284432073095:certificate/8a88e62e-795e-42ad-9b5a-ecf8730b2528
-    alb.ingress.kubernetes.io/actions.frontend-weights: >
-      {
-        "type": "forward",
-        "forwardConfig": {
-          "targetGroups": [
-            { "serviceName": "frontend-v1-service", "servicePort": 80, "weight": 100 },
-            { "serviceName": "frontend-v2-service", "servicePort": 80, "weight": 0 }
-          ]
-        }
-      }
 spec:
   ingressClassName: alb
   rules:
@@ -31,6 +21,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: frontend-weights
+            name: frontend-service
             port:
-              name: use-annotation
+              number: 80
