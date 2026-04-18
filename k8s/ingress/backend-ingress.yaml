@@ -11,8 +11,8 @@ metadata:
         "type": "forward",
         "forwardConfig": {
           "targetGroups": [
-            { "serviceName": "backend-v1-service", "servicePort": 80, "weight": 100 },
-            { "serviceName": "backend-v2-service", "servicePort": 80, "weight": 0 }
+            { "serviceName": "backend-v1-service", "servicePort": 8080, "weight": 100 },
+            { "serviceName": "backend-v2-service", "servicePort": 8080, "weight": 0 }
           ]
         }
       }
