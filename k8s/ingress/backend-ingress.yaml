@@ -6,7 +6,16 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/group.name: "devsecops-stack"
     alb.ingress.kubernetes.io/target-type: ip
-    #alb.ingress.kubernetes.io/actions.weighted-routing: '{"Type": "forward", "ForwardConfig": {"TargetGroups": [{"ServiceName": "backend-v1-service", "Port": "80", "Weight": 100}, {"ServiceName": "backend-v2-service", "Port": "80", "Weight": 0}]}}'
+    alb.ingress.kubernetes.io/actions.weighted-routing: >
+      {
+        "Type": "forward",
+        "ForwardConfig": {
+          "TargetGroups": [
+            { "ServiceName": "backend-v1-service", "Port": 80, "Weight": 100 },
+            { "ServiceName": "backend-v2-service", "Port": 80, "Weight": 0 }
+          ]
+        }
+      }
 spec:
   ingressClassName: alb
   rules:
