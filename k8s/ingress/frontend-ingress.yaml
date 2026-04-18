@@ -15,8 +15,8 @@ metadata:
         "Type": "forward",
         "ForwardConfig": {
           "TargetGroups": [
-            { "serviceName": "frontend-v1-service", "servicePort": "80", "Weight": 100 },
-            { "serviceName": "frontend-v2-service", "servicePort": "80", "Weight": 0 }
+            { "ServiceName": "frontend-v1-service", "Port": "80", "Weight": 100 },
+            { "ServiceName": "frontend-v2-service", "Port": "80", "Weight": 0 }
           ]
         }
       }
