@@ -37,8 +37,6 @@ spec:
                 configMapKeyRef:
                   name: backend-v1-config
                   key: VERSION
-            - name: TESTING
-              value: "true"
 
           volumeMounts:
             - name: secrets-store-inline
