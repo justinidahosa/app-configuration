@@ -5,12 +5,11 @@ metadata:
   namespace: backend
   annotations:
     alb.ingress.kubernetes.io/group.name: "devsecops-stack"
-    alb.ingress.kubernetes.io/rewrite-target: /$1
     alb.ingress.kubernetes.io/priority: '1'
+    alb.ingress.kubernetes.io/rewrite-target: /
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/backend-protocol: HTTP
-    alb.ingress.kubernetes.io/rewrite-target: /
     alb.ingress.kubernetes.io/healthcheck-path: /health
     alb.ingress.kubernetes.io/healthcheck-port: '8000'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
@@ -32,14 +31,14 @@ spec:
   - host: app.justinidahosa.click
     http:
       paths:
-      - path: /health
-        pathType: Exact
+      - path: /api-v1
+        pathType: Prefix
         backend:
           service:
             name: weighted-routing
             port:
               name: use-annotation
-      - path: /
+      - path: /health
         pathType: Exact
         backend:
           service:
