@@ -4,7 +4,7 @@ metadata:
   name: backend-ingress
   namespace: backend
   annotations:
-    alb.ingress.kubernetes.io/group.name: "devsecops-stack"
+    alb.ingress.kubernetes.io/group.name: "backend-stack"
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/backend-protocol: HTTP
     alb.ingress.kubernetes.io/rewrite-target: /
