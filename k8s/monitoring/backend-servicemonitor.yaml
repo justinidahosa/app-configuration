@@ -15,7 +15,7 @@ spec:
     matchNames:
       - backend
   endpoints:
-    - name: http-backend
+    - name: "http-backend"
       port: 80
       targetPort: 8000
       path: /metrics
