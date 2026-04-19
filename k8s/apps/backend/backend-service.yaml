@@ -8,7 +8,6 @@ metadata:
 spec:
   selector:
     app: backend
-    version: v1
   ports:
     - name: http-backend
       protocol: TCP
