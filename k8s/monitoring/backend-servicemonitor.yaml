@@ -6,15 +6,12 @@ metadata:
   labels:
     release: prometheus-stack
     app.kubernetes.io/instance: prometheus-stack
-  annotations:
-    argocd.argoproj.io/sync-wave: "2"
 spec:
+  namespaceSelector:
+    any: true 
   selector:
     matchLabels:
       app: backend
-  namespaceSelector:
-    matchNames:
-      - backend
   endpoints:
     - port: "http-backend"
       path: /metrics

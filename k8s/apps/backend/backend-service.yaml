@@ -3,11 +3,14 @@ kind: Service
 metadata:
   name: backend-service
   namespace: backend
+  labels:
+    app: backend
 spec:
   selector:
     app: backend
     version: v1
   ports:
-    - name: http
+    - name: http-backend
+      protocol: TCP
       port: 80
       targetPort: 8000
