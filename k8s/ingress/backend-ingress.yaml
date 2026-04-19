@@ -26,10 +26,3 @@ spec:
             name: backend-service
             port:
               number: 80
-      - path: / 
-        pathType: Prefix
-        backend:
-          service:
-            name: backend-service
-            port:
-               number: 80
