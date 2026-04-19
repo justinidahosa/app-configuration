@@ -6,7 +6,7 @@ metadata:
 spec:
   selector:
     app: frontend
-    version: v1
+    version: v2
   ports:
     - name: http
       port: 80
