@@ -5,7 +5,7 @@ metadata:
   namespace: backend
   annotations:
     alb.ingress.kubernetes.io/group.name: "devsecops-stack"
-    alb.ingress.kubernetes.io/priority: '1'
+    alb.ingress.kubernetes.io/priority: '10'
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/backend-protocol: HTTP
