@@ -23,6 +23,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: backend-service
+            name: api-proxy-service
             port:
               number: 80
