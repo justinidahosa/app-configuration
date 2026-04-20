@@ -29,6 +29,5 @@ spec:
         backend:
           service:
             name: frontend-service
-            namespace: frontend
             port:
               number: 80
