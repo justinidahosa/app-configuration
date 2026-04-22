@@ -7,6 +7,11 @@ It works alongside the `app-source-code` repository:
 - This repository pulls those images and deploys them to the cluster
 
 ---
+## Architecture Diagram
+
+![Architecture Diagram](docs/blue-green-deployment.png)
+
+---
 
 ## Overview
 
