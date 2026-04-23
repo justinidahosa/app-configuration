@@ -9,7 +9,7 @@ It works alongside the `app-source-code` repository:
 ---
 ## Architecture Diagram
 
-![Architecture Diagram](docs/blue-green-deployment.png)
+![Architecture Diagram](docs/architecture-0.png)
 
 ---
 
@@ -83,9 +83,13 @@ This allows:
 
 ## Ingress & Traffic Management
 
-- AWS Load Balancer Controller provisions ALB
+- AWS Load Balancer Controller provisions an Application Load Balancer (ALB)
 - Ingress resources route external traffic to services
 - Supports controlled routing between backend/frontend versions
+- Public application traffic is exposed via:
+  - https://app.justinidahosa.click
+
+This allows external users to access the application through a secure HTTPS endpoint backed by ACM certificates.
 
 ---
 
@@ -138,8 +142,9 @@ Integrated monitoring stack includes:
 
 ### Grafana
 
-- Dashboards for visualization
-- Exposed via ingress
+- Dashboards for visualization of application and infrastructure metrics
+- Exposed externally via ingress at:
+  - https://grafana.justinidahosa.click
 
 This provides:
 
